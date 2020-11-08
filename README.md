@@ -1,2 +1,3 @@
 # TCjsArtL
-by Art L
+prepared for Thinking Cap
+by Art Lobrin
