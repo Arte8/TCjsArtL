@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>JSTest</title>
+      <script src="https://unpkg.com/@babel/standalone@7.2.5/babel.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.0.0/umd/react.development.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.0.0/umd/react-dom.development.js"></script>
+      <script src="flashCardData.js"></script>
+
+      <link rel="stylesheet" type="text/css" href="index.css"></link>
+    </head>
+    <body>
+      <div id="app"></div>
+
+      <script type='text/babel'>
+  const cardData = importedFlashCardDataFile;
+
+
+  class App extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        cardData: []
+      };
+    }
+
+  componentDidMount() {
+    this.setState({ cardData: cardData });
+
+  }
+
+  shuffleBackward = () => {
+    const { cardData } = this.state;
+    const newCardData = [cardData[499], ...cardData.slice(0, 499)];
+    this.setState({ cardData: newCardData });
+  }
+
+  shuffleForward = () => {
+    const { cardData } = this.state;
+    const newCardData = [...cardData.slice(1), cardData[0]];
+    this.setState({ cardData: newCardData });
+  }
+
+    render() {
+      return (
+        <div className='App'>
+          <h1 className='title'>
+          JSTest by Art L
+        </h1>
+        <p className='sub-title'>
+          for Campbell MacMillan and Thinking Cap.
+        </p>
+        <div className="card-list">
+          {this.state.cardData.map((card, index) => <Card key={index} index={index} front={card.front} back={card.back} />)}
+
+        </div>
+        <div className='buttons'>
+          <button onClick={() => this.shuffleBackward()}>
+            &lt;
+          </button>
+          <button onClick={() => this.shuffleForward()}>
+            &gt;
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Card extends React.Component {
+  constructor() {
+    super();
+      this.state = {
+       flipped: false
+    };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.flipped === true) {
+      this.setState({ flipped: false });
+    }
+  }
+
+  flipCard = () => {
+    if (this.props.index === 0) {
+      this.setState({ flipped: !this.state.flipped });
+    }
+  }
+
+  render() {
+    return (
+      <div className='Card -front' onClick={() => this.flipCard()}>
+        {!this.state.flipped ?
+        <div className='front'>
+          <p className='postId'>
+            {this.props.front.postId}
+          </p>
+          <p className='id'>
+            {this.props.front.id}
+          </p>
+          <p className='name'>
+            {this.props.front.name}
+          </p>
+          <p className='email'>
+            {this.props.front.email}
+          </p>
+          <p className='body2'>
+            {this.props.front.body2}
+          </p>
+        </div>
+        :
+        <div className='back'>
+          <div className='image'>
+            <img src="images/thinking-caplime.jpg" />
+          </div>
+
+        </div>
+      }
+      </div>
+    );
+  }
+}
+        ReactDOM.render(<App />, document.getElementById('app'));
+      </script>
+    </body>
+  </html>
